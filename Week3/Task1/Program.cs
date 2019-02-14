@@ -68,6 +68,25 @@ namespace ConsoleApp24
                 button = Console.ReadKey();//каждый раз сохраняем информацию о кнопке чтобы если нажать вниз каждый раз вниз не нажималось
                 Console.BackgroundColor = ConsoleColor.Black;//чтобы все стерлось и оказался только черный фон
                 Console.Clear();//стерлось
+                if (button.Key == ConsoleKey.F2) //F2 нужна что бы переименовать имя 
+                {
+                    if (d[cursor].GetType() == typeof(FileInfo))//переименовать имя файла
+                    {
+                        string s = Console.ReadLine();//вводим имя
+                        string s1 = Path.Combine(dir.FullName, s); // комбинируем это имя с путем
+                        File.Move(d[cursor].FullName, s1); // переименуем
+                        Console.BackgroundColor = ConsoleColor.Black; //нужно для того что бы мы сразу видели изменения
+                        Console.Clear();
+                    }
+                    if (d[cursor].GetType() == typeof(DirectoryInfo))//для папки
+                    {
+                        string s = Console.ReadLine();
+                        string s1 = Path.Combine(dir.FullName, s);
+                        Directory.Move(d[cursor].FullName, s1);
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        Console.Clear();
+                    }
+                }
                 if (button.Key == ConsoleKey.UpArrow)
                 {
                     Up();//функция up
@@ -78,14 +97,32 @@ namespace ConsoleApp24
                 }
                 if (button.Key == ConsoleKey.Enter)
                 {
-                    path = d[cursor].FullName;// то он заходит в указанную папку где стоит курсор
-                    cursor = 0;//когда заходим в паку то на нулевой строке
+                    if (d[cursor].GetType() == typeof(FileInfo)) // для того что бы открыть текстовые файлы
+
+                    {
+                        StreamReader sr = File.OpenText(d[cursor].FullName);
+                        string s = sr.ReadToEnd(); // сохраняем все что есть в текстовом файле в строку
+                        sr.Close();//закрываем
+                        Console.WriteLine(s);// и выводим на экран
+                    }
+                    if (d[cursor].GetType() == typeof(DirectoryInfo))
+                    {
+                        path = d[cursor].FullName;// то он заходит в указанную папку где стоит курсор
+                        cursor = 0;//когда заходим в паку то на нулевой строке
+                    }
                 }
                 if (button.Key == ConsoleKey.Backspace)
                 {
                     cursor = 0;//на нулевой
                     dir = dir.Parent;//обращается и переходит к предыдущую папку где находится изначальная папка
                     path = dir.FullName;//и меняем путь
+                }
+                if (button.Key == ConsoleKey.Delete)
+                {
+                    if(d[cursor].GetType() == typeof(DirectoryInfo))// если это папка и курсор на ней
+                        Directory.Delete(d[cursor].FullName);//удаляем
+                    else
+                        File.Delete(d[cursor].FullName);// удаляем папку
                 }
             }
         }

@@ -35,12 +35,14 @@ namespace Task2
             {
                 Year = 1
             };
+            //st.Name
             // выводим все данные
             Console.WriteLine("Name of student: " + st.Name + " ID: " + st.Id + " Course: " + st.Year);
             //вызываем функцию, увеличивающую год обучения
             st.IncrementYear();
             // выводим обновленные данные
             Console.WriteLine("Name of student: " + st.Name + " ID: " + st.Id + " Course: " + st.Year);
+            Console.ReadKey();
         }
     }
 }
